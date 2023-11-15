@@ -1,4 +1,4 @@
-CREATE TABLE hits
+CREATE TABLE hits_local ON CLUSTER LF02_CK_TS_09
 (
     WatchID BIGINT NOT NULL,
     JavaEnable SMALLINT NOT NULL,
@@ -108,3 +108,6 @@ CREATE TABLE hits
     PRIMARY KEY (CounterID, EventDate, UserID, EventTime, WatchID)
 )
 ENGINE = MergeTree;
+
+CREATE TABLE hits ON CLUSTER LF02_CK_TS_09 as hits_local
+ENGINE = Distributed('LF02_CK_TS_09', 'default', 'hits_local', rand());
